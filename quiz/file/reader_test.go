@@ -6,12 +6,12 @@ import (
 )
 
 func TestShouldThrowExceptionWhenQuestionsAreLowerThanZero(t *testing.T) {
-	_, error := ReadFile(-1)
-	assert.EqualError(t, error, "Pick at least 1 question","Should be greater than 0")
+	_, err := ReadFile("test", -1)
+	assert.EqualError(t, err, "Pick at least 1 question","Should be greater than 0")
 }
 
 func TestShouldPassWhenValidNumberIsProvided(t *testing.T) {
-	res, error := ReadFile(3)
-	assert.NoError(t, error)
+	res, err := ReadFile("test", 3)
+	assert.NoError(t, err)
 	assert.IsType(t, []string{}, res)
 }
