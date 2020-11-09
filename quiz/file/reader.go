@@ -5,7 +5,6 @@ import (
 	"errors"
 	"github.com/thiduzz/quiz/utils"
 	"io"
-	"log"
 	"os"
 )
 
@@ -15,25 +14,26 @@ type QuestionItem struct {
 	Answer string
 }
 
-func ReadFile(filename string, questions int) ([]QuestionItem, error) {
+func OpenFile(filename string) *csv.Reader {
+	file, err := os.Open(filename)
+	utils.HasError(err)
 
+	return csv.NewReader(file)
+}
+
+func ReadFile(reader *csv.Reader, questions int) ([]QuestionItem, error) {
+
+	var questionsArray []QuestionItem
 	if(questions <= 0){
 		return nil, errors.New("Pick at least 1 question")
 	}
 
-	var questionsArray []QuestionItem
-	file, err := os.Open(filename)
-	utils.HasError(err)
-	rows := csv.NewReader(file)
-
 	for i := 0; i < questions; i++ {
-		record, err := rows.Read()
+		record, err := reader.Read()
 		if err == io.EOF {
 			break
 		}
-		if err != nil {
-			log.Fatal(err)
-		}
+		utils.HasError(err)
 		questionsArray = append(questionsArray, QuestionItem{
 			Question: record[0],
 			Answer: record[1],
@@ -41,8 +41,4 @@ func ReadFile(filename string, questions int) ([]QuestionItem, error) {
 	}
 
 	return questionsArray, nil
-}
-
-type Reader struct {
-
 }

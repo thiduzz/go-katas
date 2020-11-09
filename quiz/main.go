@@ -4,15 +4,19 @@ import (
 	"flag"
 	"fmt"
 	"github.com/thiduzz/quiz/file"
+	"time"
 )
 
 func main(){
 	var parsedQuestions []file.QuestionItem
 	questions, _, filename := readParams()
-	parsedQuestions, _ = file.ReadFile(filename, questions)
-	fmt.Println(parsedQuestions)
-	//TODO: open csv
-	//TODO: pick only the amount of questions specified (if there is none, consider default)
+	parsedQuestions, _ = file.ReadFile(file.OpenFile(filename), questions)
+	timer2 := time.NewTimer(time.Second * 5)
+	go func() {
+		<-timer2.C
+		fmt.Println(parsedQuestions)
+	}()
+	time.Sleep(time.Second * 8)
 	//TODO: kick-start a timer
 	//TODO: observe the timer
 	//TODO: for each question
