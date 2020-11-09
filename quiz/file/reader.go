@@ -3,16 +3,11 @@ package file
 import (
 	"encoding/csv"
 	"errors"
+	"github.com/thiduzz/quiz"
 	"github.com/thiduzz/quiz/utils"
 	"io"
 	"os"
 )
-
-
-type QuestionItem struct {
-	Question string
-	Answer string
-}
 
 func OpenFile(filename string) *csv.Reader {
 	file, err := os.Open(filename)
@@ -21,9 +16,9 @@ func OpenFile(filename string) *csv.Reader {
 	return csv.NewReader(file)
 }
 
-func ReadFile(reader *csv.Reader, questions int) ([]QuestionItem, error) {
+func ReadFile(reader *csv.Reader, questions int) ([]quiz.QuestionItem, error) {
 
-	var questionsArray []QuestionItem
+	var questionsArray []quiz.QuestionItem
 	if(questions <= 0){
 		return nil, errors.New("Pick at least 1 question")
 	}
@@ -34,7 +29,7 @@ func ReadFile(reader *csv.Reader, questions int) ([]QuestionItem, error) {
 			break
 		}
 		utils.HasError(err)
-		questionsArray = append(questionsArray, QuestionItem{
+		questionsArray = append(questionsArray, quiz.QuestionItem{
 			Question: record[0],
 			Answer: record[1],
 		})

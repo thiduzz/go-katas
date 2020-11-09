@@ -2,21 +2,27 @@ package main
 
 import (
 	"flag"
-	"fmt"
+	"github.com/thiduzz/quiz"
 	"github.com/thiduzz/quiz/file"
 	"time"
 )
 
 func main(){
-	var parsedQuestions []file.QuestionItem
-	questions, _, filename := readParams()
+	var parsedQuestions []quiz.QuestionItem
+	questions, seconds, filename := readParams()
 	parsedQuestions, _ = file.ReadFile(file.OpenFile(filename), questions)
-	timer2 := time.NewTimer(time.Second * 5)
-	go func() {
-		<-timer2.C
-		fmt.Println(parsedQuestions)
-	}()
-	time.Sleep(time.Second * 8)
+
+	newQuiz :=  quiz.Quiz{
+		Questions: parsedQuestions,
+		Correct: 0,
+		Time: time.Second * time.Duration(seconds),
+	}
+	quiz.Start(&newQuiz)
+	timer := time.AfterFunc(newQuiz.Time, func() {
+		quiz.ShowResults(&newQuiz)
+	})
+	defer timer.Stop()
+
 	//TODO: kick-start a timer
 	//TODO: observe the timer
 	//TODO: for each question

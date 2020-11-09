@@ -3,6 +3,7 @@ package file
 import (
 	csv "encoding/csv"
 	"github.com/stretchr/testify/assert"
+	"github.com/thiduzz/quiz"
 	"strings"
 	"testing"
 )
@@ -37,7 +38,7 @@ func TestShouldThrowExceptionWhenQuestionsAreLowerThanZero(t *testing.T) {
 func TestShouldPassWhenValidNumberIsProvided(t *testing.T) {
 	res, err := ReadFile(mockFile(3), 3)
 	assert.NoError(t, err)
-	assert.IsType(t, []QuestionItem{}, res)
+	assert.IsType(t, []quiz.QuestionItem{}, res)
 }
 
 func TestShouldReturnCorrectAmountOfQuestionsSpecified(t *testing.T) {
