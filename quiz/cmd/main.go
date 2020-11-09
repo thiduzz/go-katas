@@ -18,19 +18,12 @@ func main(){
 		Time: time.Second * time.Duration(seconds),
 	}
 	quiz.Start(&newQuiz)
-	timer := time.AfterFunc(newQuiz.Time, func() {
+	timer := time.NewTimer(newQuiz.Time)
+	go func() {
+		<-timer.C
 		quiz.ShowResults(&newQuiz)
-	})
-	defer timer.Stop()
-
-	//TODO: kick-start a timer
-	//TODO: observe the timer
-	//TODO: for each question
-	//	- Print
-	//	- Expect answer
-	//	- Compare answer - store corrects in a separate array
-	//TODO: no more questions to show? Show results
-	//TODO: no more time? Show results
+	}()
+	time.Sleep(newQuiz.Time)
 }
 
 func readParams() (int, int, string) {

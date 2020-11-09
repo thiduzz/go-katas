@@ -34,5 +34,6 @@ func Start(currentQuiz *Quiz) {
 }
 
 func ShowResults(currentQuiz *Quiz) {
-	fmt.Println("Time finished!")
+	fmt.Println("Time finished")
+	fmt.Println(fmt.Sprintf("Correct answers: %d", currentQuiz.Correct))
 }
