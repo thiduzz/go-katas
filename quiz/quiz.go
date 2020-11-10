@@ -24,9 +24,7 @@ type Quiz struct {
 func Start(currentQuiz *Quiz) {
 	reader := bufio.NewReader(os.Stdin)
 	for index, question := range currentQuiz.Questions {
-		fmt.Println(fmt.Sprintf("Question %d: %s", index, question.Question))
-		text, _ := reader.ReadString('\n')
-		if strings.TrimSuffix(text,"\n") == question.Answer {
+		if printAndReadAnswer(reader, index, question) {
 			currentQuiz.Correct++
 		}
 	}
@@ -34,6 +32,14 @@ func Start(currentQuiz *Quiz) {
 }
 
 func ShowResults(currentQuiz *Quiz) {
-	fmt.Println("Time finished")
 	fmt.Println(fmt.Sprintf("Correct answers: %d", currentQuiz.Correct))
+}
+
+func printAndReadAnswer(reader *bufio.Reader, index int, question QuestionItem) bool {
+	fmt.Println(fmt.Sprintf("Question %d: %s", index, question.Question))
+	text, _ := reader.ReadString('\n')
+	if strings.TrimSuffix(text,"\n") == question.Answer {
+		return true
+	}
+	return false
 }

@@ -2,16 +2,19 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"github.com/thiduzz/quiz"
 	"github.com/thiduzz/quiz/file"
+	"github.com/thiduzz/quiz/utils"
+	"os"
 	"time"
 )
 
 func main(){
 	var parsedQuestions []quiz.QuestionItem
 	questions, seconds, filename := readParams()
-	parsedQuestions, _ = file.ReadFile(file.OpenFile(filename), questions)
-
+	parsedQuestions, err := file.ReadFile(file.OpenFile(filename), questions)
+	utils.HasError(err)
 	newQuiz :=  quiz.Quiz{
 		Questions: parsedQuestions,
 		Correct: 0,
@@ -21,7 +24,9 @@ func main(){
 	timer := time.NewTimer(newQuiz.Time)
 	go func() {
 		<-timer.C
+		fmt.Println("Time finished")
 		quiz.ShowResults(&newQuiz)
+		os.Exit(0)
 	}()
 	time.Sleep(newQuiz.Time)
 }

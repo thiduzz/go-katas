@@ -7,6 +7,7 @@ import (
 	"github.com/thiduzz/quiz/utils"
 	"io"
 	"os"
+	"strings"
 )
 
 func OpenFile(filename string) *csv.Reader {
@@ -31,7 +32,7 @@ func ReadFile(reader *csv.Reader, questions int) ([]quiz.QuestionItem, error) {
 		utils.HasError(err)
 		questionsArray = append(questionsArray, quiz.QuestionItem{
 			Question: record[0],
-			Answer: record[1],
+			Answer: strings.TrimSpace(record[1]),
 		})
 	}
 

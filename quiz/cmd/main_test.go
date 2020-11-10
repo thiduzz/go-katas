@@ -5,9 +5,6 @@ import (
 	"os"
 	"testing"
 )
-func test(t *testing.T) {
-	t.Name()
-}
 
 func TestArgumentsAreIntegers(t *testing.T) {
 
