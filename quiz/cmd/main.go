@@ -2,11 +2,9 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/thiduzz/quiz"
 	"github.com/thiduzz/quiz/file"
 	"github.com/thiduzz/quiz/utils"
-	"os"
 	"time"
 )
 
@@ -20,15 +18,8 @@ func main(){
 		Correct: 0,
 		Time: time.Second * time.Duration(seconds),
 	}
-	quiz.Start(&newQuiz)
 	timer := time.NewTimer(newQuiz.Time)
-	go func() {
-		<-timer.C
-		fmt.Println("Time finished")
-		quiz.ShowResults(&newQuiz)
-		os.Exit(0)
-	}()
-	time.Sleep(newQuiz.Time)
+	quiz.Start(&newQuiz, timer)
 }
 
 func readParams() (int, int, string) {

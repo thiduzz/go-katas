@@ -21,11 +21,23 @@ type Quiz struct {
 	Time time.Duration
 }
 
-func Start(currentQuiz *Quiz) {
+func Start(currentQuiz *Quiz, timer *time.Timer) {
 	reader := bufio.NewReader(os.Stdin)
+	questionChannel := make(chan bool)
+
 	for index, question := range currentQuiz.Questions {
-		if printAndReadAnswer(reader, index, question) {
-			currentQuiz.Correct++
+		go func(){
+			questionChannel <- printAndReadAnswer(reader, index, question)
+		}()
+		select {
+			case <-timer.C:
+				fmt.Println("Ran out of time!")
+				ShowResults(currentQuiz)
+				return;
+			case correct := <-questionChannel:
+				if correct {
+					currentQuiz.Correct++
+				}
 		}
 	}
 	ShowResults(currentQuiz)
